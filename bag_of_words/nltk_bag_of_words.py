@@ -45,5 +45,16 @@ for sentence in dataset:
 
 # Display the final Bag of Words (word frequency)
 print("Word Frequency (Bag of Words):")
-print(word2count)
+print(sorted(word2count))
+print("-----------------------")
 
+# Generate a sorted list of unique words (vocabulary)
+vocabulary = sorted(word2count.keys())
+
+# Create vector representation (counts in the order of the vocabulary)
+vector = [str(word2count[word]) for word in vocabulary]
+vector_string = ", ".join(vector)
+
+# Display the vector representation
+print("Vocabulary:", vocabulary)
+print("Vector Representation:", f"[{vector_string}]")
