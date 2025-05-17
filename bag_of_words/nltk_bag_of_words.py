@@ -24,37 +24,49 @@ Bag of Words (BoW) Model
 - Output: A dictionary representing word frequencies in the text.
 """
 
+# Step 1: Build Vocabulary from Initial Text
+def build_vocabulary(text):
+    dataset = nltk.sent_tokenize(text)
+    vocabulary = set()
 
-# Input Text
-text = "Python is great for data science. Coding is fun!"
+    for sentence in dataset:
+        for word in nltk.word_tokenize(sentence):
+            word = word.lower().strip(string.punctuation)
+            if word:
+                vocabulary.add(word)
+    
+    # Sorted for consistent vector order
+    return sorted(list(vocabulary)) 
 
-# Tokenize text into sentences
-dataset = nltk.sent_tokenize(text)
-print("Tokenized Sentences:", dataset)
+# Step 2: Convert New Text to Bag of Words 
+# Vector Using the Fixed Vocabulary
+def text_to_bag_of_words(text, vocabulary):
+    dataset = nltk.sent_tokenize(text)
+    # Initialize all counts to 0
+    word2count = dict.fromkeys(vocabulary, 0) 
 
-# Initialize dictionary for word counting
-word2count = {}
+    for sentence in dataset:
+        for word in nltk.word_tokenize(sentence):
+            word = word.lower().strip(string.punctuation)
+            
+            # Only count words in the fixed vocabulary
+            if word in word2count: 
+                word2count[word] += 1
 
-# Tokenize words in each sentence and count
-for sentence in dataset:
-    for word in nltk.word_tokenize(sentence):
-        # Lowercase and remove punctuation
-        word = word.lower().strip(string.punctuation) 
-        if word:  # Ignore empty words
-            word2count[word] = word2count.get(word, 0) + 1
+    # Generate vector string
+    vector = [str(word2count[word]) for word in vocabulary]
+    return vector
 
-# Display the final Bag of Words (word frequency)
-print("Word Frequency (Bag of Words):")
-print(sorted(word2count))
-print("-----------------------")
+# Initial Text (Training Text)
+initial_text = "Python is great for data science. Coding is fun!"
+vocabulary = build_vocabulary(initial_text)
 
-# Generate a sorted list of unique words (vocabulary)
-vocabulary = sorted(word2count.keys())
+print("Vocabulary (Fixed):", vocabulary)
 
-# Create vector representation (counts in the order of the vocabulary)
-vector = [str(word2count[word]) for word in vocabulary]
-vector_string = ", ".join(vector)
+# Using the Fixed Vocabulary with New Text
+# generate Bag of Words Vector
+new_text = "Python is amazing. Data science is evolving."
+vector = text_to_bag_of_words(new_text, vocabulary)
 
-# Display the vector representation
-print("Vocabulary:", vocabulary)
-print("Vector Representation:", f"[{vector_string}]")
+print("Bag of Words Vector for New Text:")
+print(f"[{', '.join(vector)}]")
