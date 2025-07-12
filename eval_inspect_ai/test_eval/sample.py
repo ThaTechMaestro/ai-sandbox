@@ -1,7 +1,12 @@
+import os
+from dotenv import load_dotenv
 from inspect_ai import Task, task
 from inspect_ai.dataset import Sample
 from inspect_ai.scorer import exact
 from inspect_ai.solver import generate
+
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../.env'))
+
 
 
 @task
